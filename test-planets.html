@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Planet Generation Test</title>
+</head>
+<body>
+    <h1>Planet Generation Test</h1>
+    <p>Open browser console and navigate to <a href="http://localhost:5174">http://localhost:5174</a></p>
+    <p>Then click "Explore Data" and check console for:</p>
+    <ul>
+        <li>handleModeTransition: Switching to EXPLORE</li>
+        <li>generateDetailedUniverse: Starting FAST meridian planet generation...</li>
+        <li>Generating 8 meridian planets for fast loading</li>
+        <li>SimplePlanetSystem: Rendering X simple purple planets</li>
+        <li>WASDCameraController: Camera positioned at [0, 30, 150]</li>
+    </ul>
+    
+    <h2>Expected Behavior:</h2>
+    <ol>
+        <li>Landing page shows "Constella" title with starfield</li>
+        <li>Click "Explore Data" button</li>
+        <li>Should switch to explorer mode with 8 purple planets visible</li>
+        <li>Planets should be positioned in a circle around origin (80-185 units away)</li>
+        <li>Camera should be at [0, 30, 150] looking at origin</li>
+        <li>Mobile controls should appear on mobile devices</li>
+        <li>WASD controls should work on desktop</li>
+    </ol>
+    
+    <h2>Debug Info:</h2>
+    <p>Check the debug panel in top-right corner for:</p>
+    <ul>
+        <li>Mode: EXPLORE</li>
+        <li>Planets: 8</li>
+        <li>Generated: Yes</li>
+        <li>First Planet: Mars (or other planet name)</li>
+    </ul>
+</body>
+</html>

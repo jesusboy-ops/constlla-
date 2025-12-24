@@ -1,0 +1,689 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+  
+  color-scheme: dark;
+  
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  /* 🎨 Purple Neon Color System */
+  --bg-primary: #0B061A;
+  --bg-secondary: #121212;
+  --bg-tertiary: #1A1A2E;
+  
+  --neon-primary: #9B5CFF;
+  --neon-secondary: #C77DFF;
+  --neon-accent: #5EE7FF;
+  --neon-gold: #F5C77A;
+  --neon-magenta: #FF4ECD;
+  
+  --text-primary: #EDE9FF;
+  --text-secondary: rgba(237, 233, 255, 0.7);
+  --text-tertiary: rgba(237, 233, 255, 0.5);
+  
+  --glass-bg: rgba(155, 92, 255, 0.15);
+  --glass-border: rgba(155, 92, 255, 0.3);
+  --glass-hover: rgba(155, 92, 255, 0.25);
+  
+  --planet-core-dark: #1A1A2E;
+  --planet-core-space: #121212;
+  
+  /* Planet emissive colors */
+  --planet-violet: #9B5CFF;
+  --planet-magenta: #FF4ECD;
+  --planet-cyan: #5EE7FF;
+  --planet-gold: #F5C77A;
+  
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  background: var(--bg-primary);
+  overflow-x: hidden;
+  color: var(--text-primary);
+}
+
+#root {
+  width: 100vw;
+  height: 100vh;
+  position: relative;
+}
+
+/* Purple Neon Glass Morphism */
+.glass {
+  background: var(--glass-bg);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid var(--glass-border);
+  box-shadow: 0 8px 32px 0 rgba(155, 92, 255, 0.2);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.glass:hover {
+  background: var(--glass-hover);
+  border-color: var(--neon-primary);
+  box-shadow: 0 12px 40px 0 rgba(155, 92, 255, 0.4);
+  transform: translateY(-2px);
+}
+
+.glass-hover {
+  @apply transition-all duration-300 hover:bg-glass-hover hover:border-white/20;
+}
+
+/* Purple Neon Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-secondary);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, var(--neon-primary) 0%, var(--neon-secondary) 100%);
+  border-radius: 4px;
+  transition: background 0.3s;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, var(--neon-secondary) 0%, var(--neon-magenta) 100%);
+}
+
+/* Animation utilities */
+@keyframes pulse-glow {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(59, 130, 246, 0.5);
+  }
+  50% {
+    box-shadow: 0 0 40px rgba(59, 130, 246, 0.8);
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes spin-slow {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Loading spinner */
+.spinner {
+  @apply animate-spin rounded-full border-2 border-white/20 border-t-white;
+}
+
+/* Purple Neon Text Glow */
+.text-glow {
+  text-shadow: 0 0 10px currentColor, 0 0 20px rgba(155, 92, 255, 0.5);
+}
+
+.text-neon-purple {
+  color: var(--neon-primary);
+  text-shadow: 0 0 10px var(--neon-primary), 0 0 20px var(--neon-primary), 0 0 30px var(--neon-primary);
+}
+
+/* Button hover effects */
+.btn-glow {
+  @apply transition-all duration-300;
+  box-shadow: 0 0 0 rgba(59, 130, 246, 0);
+}
+
+.btn-glow:hover {
+  box-shadow: 0 0 20px rgba(59, 130, 246, 0.5);
+}
+
+/* Canvas container - BELOW UI (z-index 1) */
+.canvas-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  background: var(--bg-primary);
+}
+
+/* UI overlay - ABOVE canvas (z-index 100) */
+.ui-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 100;
+  pointer-events: none;
+}
+
+.ui-overlay > * {
+  pointer-events: auto;
+}
+
+/* Navbar spacing - add padding to content when navbar is fixed */
+body {
+  padding-top: 64px;
+}
+
+@media (max-width: 768px) {
+  body {
+    padding-top: 64px;
+  }
+}
+
+/* Responsive utilities */
+@media (max-width: 768px) {
+  .glass {
+    @apply backdrop-blur-sm;
+  }
+  
+  /* Mobile-specific adjustments */
+  body {
+    overflow-x: hidden;
+  }
+  
+  /* Reduce text sizes on mobile */
+  .text-6xl {
+    @apply text-4xl;
+  }
+  
+  .text-xl {
+    @apply text-lg;
+  }
+  
+  /* Mobile canvas adjustments */
+  .canvas-container {
+    touch-action: manipulation;
+  }
+  
+  /* Mobile UI overlay adjustments */
+  .ui-overlay {
+    padding: 0.5rem;
+  }
+}
+
+@media (max-width: 640px) {
+  /* Extra small screens */
+  .glass {
+    @apply backdrop-blur-sm p-3;
+  }
+  
+  /* Smaller text on very small screens */
+  .text-4xl {
+    @apply text-3xl;
+  }
+  
+  .text-lg {
+    @apply text-base;
+  }
+  
+  /* Compact spacing */
+  .space-y-4 > * + * {
+    margin-top: 0.75rem;
+  }
+  
+  .space-y-3 > * + * {
+    margin-top: 0.5rem;
+  }
+}
+
+/* Landscape mobile adjustments */
+@media (max-width: 768px) and (orientation: landscape) {
+  .ui-overlay {
+    padding: 0.25rem;
+  }
+  
+  /* Reduce navbar height in landscape */
+  .fixed.top-3 {
+    top: 0.5rem;
+  }
+  
+  /* Adjust panel positions */
+  .fixed.top-20 {
+    top: 4rem;
+  }
+}
+
+/* Touch device optimizations */
+@media (hover: none) and (pointer: coarse) {
+  /* Touch-friendly button sizes */
+  button {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
+  /* Remove hover effects on touch devices */
+  .hover\:bg-white\/10:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+  }
+  
+  .hover\:bg-white\/20:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+  
+  /* Prevent button focus/active states on mobile */
+  button {
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    user-select: none;
+    outline: none !important;
+  }
+  
+  button:focus,
+  button:active,
+  button:hover {
+    outline: none !important;
+    background-color: inherit !important;
+    border-color: inherit !important;
+  }
+  
+  /* Specifically target mobile directional control buttons */
+  .mobile-nav-button {
+    -webkit-tap-highlight-color: transparent !important;
+    -webkit-touch-callout: none !important;
+    -webkit-user-select: none !important;
+    user-select: none !important;
+    outline: none !important;
+    border: none !important;
+  }
+  
+  .mobile-nav-button:focus,
+  .mobile-nav-button:active,
+  .mobile-nav-button:hover {
+    outline: none !important;
+    box-shadow: none !important;
+    background-color: inherit !important;
+    border-color: inherit !important;
+  }
+}
+
+/* Focus styles */
+button:focus,
+input:focus,
+textarea:focus,
+select:focus {
+  @apply outline-none ring-2 ring-blue-500/50;
+}
+
+/* Purple Neon Selection */
+::selection {
+  background: rgba(155, 92, 255, 0.3);
+  color: var(--text-primary);
+}
+
+/* Professional gradient backgrounds */
+.gradient-bg-primary {
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(147, 51, 234, 0.1) 100%);
+}
+
+.gradient-bg-secondary {
+  background: linear-gradient(135deg, rgba(236, 72, 153, 0.1) 0%, rgba(239, 68, 68, 0.1) 100%);
+}
+
+/* Professional button styles */
+.btn-primary {
+  @apply bg-gradient-to-r from-blue-500 to-purple-600 text-white font-semibold px-6 py-3 rounded-xl;
+  @apply transition-all duration-300 hover:from-blue-600 hover:to-purple-700;
+  @apply shadow-lg hover:shadow-xl transform hover:scale-105 active:scale-95;
+}
+
+.btn-secondary {
+  @apply bg-white/10 text-white font-semibold px-6 py-3 rounded-xl border border-white/20;
+  @apply transition-all duration-300 hover:bg-white/20 hover:border-white/30;
+  @apply backdrop-blur-md;
+}
+
+/* Professional card styles */
+.card-professional {
+  @apply bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-6;
+  @apply shadow-2xl transition-all duration-300 hover:bg-white/10 hover:border-white/20;
+}
+
+/* Professional input styles */
+.input-professional {
+  @apply bg-white/5 border border-white/20 rounded-xl px-4 py-3 text-white;
+  @apply backdrop-blur-md transition-all duration-300;
+  @apply focus:bg-white/10 focus:border-blue-400/50 focus:outline-none focus:ring-2 focus:ring-blue-400/20;
+}
+
+
+/* Professional animations */
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInScale {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.animate-slide-in-up {
+  animation: slideInUp 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.animate-fade-in-scale {
+  animation: fadeInScale 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Purple Neon Gradient Text */
+.text-gradient {
+  background: linear-gradient(135deg, var(--neon-primary) 0%, var(--neon-secondary) 50%, var(--neon-magenta) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.text-shadow-professional {
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5), 0 0 20px rgba(59, 130, 246, 0.3);
+}
+
+/* Professional backdrop blur utilities */
+.backdrop-blur-professional {
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+}
+
+/* Professional border gradients */
+.border-gradient {
+  border: 1px solid;
+  border-image: linear-gradient(135deg, rgba(59, 130, 246, 0.5), rgba(147, 51, 234, 0.5)) 1;
+}
+
+/* Performance optimizations */
+.will-change-transform {
+  will-change: transform;
+}
+
+.will-change-opacity {
+  will-change: opacity;
+}
+
+.gpu-accelerated {
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+}
+
+/* Mobile-specific 3D canvas optimizations */
+@media (max-width: 768px) {
+  canvas {
+    touch-action: pan-x pan-y;
+  }
+  
+  /* Reduce 3D complexity on mobile */
+  .canvas-container canvas {
+    image-rendering: optimizeSpeed;
+    image-rendering: -webkit-optimize-contrast;
+  }
+}
+
+/* Tablet optimizations */
+@media (min-width: 768px) and (max-width: 1024px) {
+  .glass {
+    backdrop-filter: blur(15px) saturate(150%);
+    -webkit-backdrop-filter: blur(15px) saturate(150%);
+  }
+}
+
+/* High DPI display optimizations */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  .glass {
+    backdrop-filter: blur(25px) saturate(200%);
+    -webkit-backdrop-filter: blur(25px) saturate(200%);
+  }
+}
+
+/* Technical animations for planet system */
+@keyframes technicalFadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9) translateY(10px);
+    filter: blur(4px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+    filter: blur(0);
+  }
+}
+
+@keyframes technicalGlow {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(0, 255, 136, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  }
+  50% {
+    box-shadow: 0 0 40px rgba(0, 255, 136, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  }
+}
+
+@keyframes dataStream {
+  0% {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}
+
+.animate-technical-glow {
+  animation: technicalGlow 2s ease-in-out infinite;
+}
+
+.animate-data-stream {
+  animation: dataStream 3s linear infinite;
+}
+
+/* Professional technical styling */
+.technical-panel {
+  background: linear-gradient(135deg, 
+    rgba(15, 23, 42, 0.95) 0%, 
+    rgba(0, 0, 0, 0.95) 100%);
+  backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid rgba(6, 182, 212, 0.4);
+  box-shadow: 
+    0 20px 60px rgba(0, 255, 136, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1),
+    0 0 0 1px rgba(6, 182, 212, 0.1);
+}
+
+.technical-grid-item {
+  background: rgba(30, 41, 59, 0.5);
+  border: 1px solid rgba(71, 85, 105, 0.5);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.technical-grid-item:hover {
+  background: rgba(30, 41, 59, 0.8);
+  border-color: rgba(6, 182, 212, 0.6);
+  transform: translateY(-1px);
+}
+
+/* Enhanced text shadows for technical look */
+.text-technical {
+  text-shadow: 0 0 10px currentColor, 0 2px 4px rgba(0, 0, 0, 0.8);
+}
+
+.text-technical-glow {
+  text-shadow: 
+    0 0 5px currentColor,
+    0 0 10px currentColor,
+    0 0 15px currentColor,
+    0 2px 4px rgba(0, 0, 0, 0.8);
+}
+
+/* Professional planet system enhancements */
+.planet-data-panel {
+  background: linear-gradient(135deg, 
+    rgba(15, 23, 42, 0.98) 0%, 
+    rgba(0, 0, 0, 0.98) 100%);
+  backdrop-filter: blur(25px) saturate(200%);
+  border: 1px solid rgba(6, 182, 212, 0.5);
+  box-shadow: 
+    0 25px 80px rgba(0, 255, 136, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15),
+    0 0 0 1px rgba(6, 182, 212, 0.2);
+}
+
+.system-status-indicator {
+  background: radial-gradient(circle, rgba(34, 197, 94, 0.3) 0%, transparent 70%);
+  animation: statusPulse 2s ease-in-out infinite;
+}
+
+@keyframes statusPulse {
+  0%, 100% {
+    opacity: 0.8;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.1);
+  }
+}
+
+/* Technical typography */
+.font-technical {
+  font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+  font-variant-numeric: tabular-nums;
+}
+
+.tracking-technical {
+  letter-spacing: 0.05em;
+}
+
+/* Enhanced glass morphism for technical panels */
+.glass-technical {
+  background: linear-gradient(135deg, 
+    rgba(30, 41, 59, 0.4) 0%, 
+    rgba(15, 23, 42, 0.6) 100%);
+  backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid rgba(71, 85, 105, 0.3);
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.glass-technical:hover {
+  background: linear-gradient(135deg, 
+    rgba(30, 41, 59, 0.6) 0%, 
+    rgba(15, 23, 42, 0.8) 100%);
+  border-color: rgba(6, 182, 212, 0.5);
+  transform: translateY(-2px);
+}
+
+/* Professional button variants */
+.btn-technical {
+  background: linear-gradient(135deg, 
+    rgba(6, 182, 212, 0.1) 0%, 
+    rgba(8, 145, 178, 0.2) 100%);
+  border: 1px solid rgba(6, 182, 212, 0.3);
+  color: #06b6d4;
+  font-weight: 500;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.btn-technical:hover {
+  background: linear-gradient(135deg, 
+    rgba(6, 182, 212, 0.2) 0%, 
+    rgba(8, 145, 178, 0.3) 100%);
+  border-color: rgba(6, 182, 212, 0.6);
+  color: #67e8f9;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 20px rgba(6, 182, 212, 0.3);
+}
+
+/* Technical data visualization */
+.data-bar {
+  background: linear-gradient(90deg, 
+    rgba(34, 197, 94, 0.3) 0%, 
+    rgba(34, 197, 94, 0.1) 100%);
+  border-radius: 2px;
+  height: 4px;
+  position: relative;
+  overflow: hidden;
+}
+
+.data-bar::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, 
+    transparent 0%, 
+    rgba(34, 197, 94, 0.6) 50%, 
+    transparent 100%);
+  animation: dataFlow 2s linear infinite;
+}
+
+@keyframes dataFlow {
+  0% {
+    left: -100%;
+  }
+  100% {
+    left: 100%;
+  }
+}
+
+/* Reduced motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  
+  .animate-pulse,
+  .animate-spin,
+  .animate-bounce,
+  .animate-technical-glow,
+  .animate-data-stream {
+    animation: none !important;
+  }
+}
