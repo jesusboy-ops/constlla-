@@ -75,7 +75,7 @@ const MassivePlanetSystem = ({ onPlanetHover, onPlanetClick, onPlanetsUpdate }) 
         planetName: REAL_PLANET_NAMES[i - 1] || `Planet-${i}`,
         blockNumber,
         position: [x, y, z],
-        size: 1 + Math.random() * 2, // Very small size: 1-3
+        size: 3 + Math.random() * 4, // Increased size: 3-7 units for better visibility
         color: '#C084FC', // Very bright purple color for all planets
         
         // Enhanced blockchain data
@@ -263,7 +263,7 @@ const TechnicalPlanet = ({ planet, isHovered, isSelected, onHover, onClick, onCl
       <group ref={labelGroupRef}>
         {/* Planet Name - Large and Clear */}
         <Text
-          position={[0, planet.size + 60, 0]}
+          position={[0, planet.size + 65, 0]} // Adjusted for larger planets
           fontSize={10.0}
           color="#FFFFFF"
           anchorX="center"
@@ -282,7 +282,7 @@ const TechnicalPlanet = ({ planet, isHovered, isSelected, onHover, onClick, onCl
         
         {/* Click for Data Button - Bright and Clickable */}
         <Text
-          position={[0, planet.size + 40, 0]}
+          position={[0, planet.size + 45, 0]} // Adjusted for larger planets
           fontSize={6.0}
           color="#00FFFF"
           anchorX="center"
