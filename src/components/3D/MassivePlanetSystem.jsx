@@ -75,7 +75,7 @@ const MassivePlanetSystem = ({ onPlanetHover, onPlanetClick, onPlanetsUpdate }) 
         planetName: REAL_PLANET_NAMES[i - 1] || `Planet-${i}`,
         blockNumber,
         position: [x, y, z],
-        size: 3 + Math.random() * 4, // Increased size: 3-7 units for better visibility
+        size: 8 + Math.random() * 6, // Much larger size: 8-14 units for excellent visibility
         color: '#C084FC', // Very bright purple color for all planets
         
         // Enhanced blockchain data
@@ -164,7 +164,7 @@ const TechnicalPlanet = ({ planet, isHovered, isSelected, onHover, onClick, onCl
 
   // Calculate smart panel position based on screen coordinates
   const getSmartPanelPosition = useCallback(() => {
-    if (!meshRef.current) return [0, planet.size + 8, 0];
+    if (!meshRef.current) return [0, planet.size + 25, 0];
 
     try {
       // Get world position of planet
@@ -180,7 +180,7 @@ const TechnicalPlanet = ({ planet, isHovered, isSelected, onHover, onClick, onCl
 
       // Simple positioning logic
       let offsetX = 0;
-      let offsetY = planet.size + 8;
+      let offsetY = planet.size + 25;
 
       // Horizontal positioning - if too far right, move left
       if (x > 0.3) {
@@ -191,15 +191,15 @@ const TechnicalPlanet = ({ planet, isHovered, isSelected, onHover, onClick, onCl
 
       // Vertical positioning - if too high, move down
       if (y > 0.3) {
-        offsetY = -(planet.size + 15); // Move panel below
+        offsetY = -(planet.size + 30); // Move panel below
       } else if (y < -0.3) {
-        offsetY = planet.size + 20; // Move panel above
+        offsetY = planet.size + 35; // Move panel above
       }
 
       return [offsetX, offsetY, 0];
     } catch (error) {
       console.warn('Error calculating panel position:', error);
-      return [0, planet.size + 8, 0]; // Fallback position
+      return [0, planet.size + 25, 0]; // Fallback position
     }
   }, [camera, planet.size]);
 
@@ -263,7 +263,7 @@ const TechnicalPlanet = ({ planet, isHovered, isSelected, onHover, onClick, onCl
       <group ref={labelGroupRef}>
         {/* Planet Name - Large and Clear */}
         <Text
-          position={[0, planet.size + 65, 0]} // Adjusted for larger planets
+          position={[0, planet.size + 20, 0]} // Adjusted for much larger planets (8-14 units)
           fontSize={10.0}
           color="#FFFFFF"
           anchorX="center"
@@ -282,7 +282,7 @@ const TechnicalPlanet = ({ planet, isHovered, isSelected, onHover, onClick, onCl
         
         {/* Click for Data Button - Bright and Clickable */}
         <Text
-          position={[0, planet.size + 45, 0]} // Adjusted for larger planets
+          position={[0, planet.size + 5, 0]} // Adjusted for much larger planets (8-14 units)
           fontSize={6.0}
           color="#00FFFF"
           anchorX="center"
